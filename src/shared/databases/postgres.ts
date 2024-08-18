@@ -56,4 +56,22 @@ const destroy = async (table: string, data: IPostgres): Promise<QueryResult<IPos
     return result;
 };
 
-export { create, find, destroy };
+const update = async (table: string, data: IPostgres, condition: IPostgres): Promise<QueryResult<IPostgres>> => {
+    const fields = Object.keys(data);
+    const values = Object.values(data);
+    const setClause = fields.map((field, i) => `${field} = $${i + 1}`).join(', ');
+    const whereClause = Object.keys(condition)
+        .map((key, i) => `${key}=$${fields.length + i + 1}`)
+        .join(' AND ');
+    const conditionValues = Object.values(condition);
+
+    const query = {
+        text: `UPDATE ${table} SET ${setClause} WHERE ${whereClause} RETURNING *`,
+        values: [...values, ...conditionValues],
+    };
+
+    const result = await pool.query<IPostgres>(query);
+    return result;
+};
+
+export { create, find, destroy, update };
