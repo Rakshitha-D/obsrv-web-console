@@ -193,5 +193,20 @@ export default [
                 ]
             }
         ]
+    },
+    {
+        path: 'users',
+        routes: [
+            {
+                path: 'userInfo',
+                method: 'GET',
+                middlewares: [controllers.get('user:info')?.handler({})],
+            },
+            {
+                path: 'userUpdate',
+                method: 'PATCH',
+                middlewares: [controllers.get('user:update')?.handler({})],
+            },
+        ]
     }
 ];
