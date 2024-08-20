@@ -240,24 +240,3 @@ const createUser = (emailAddress: string, provider: string, done: any) => {
     });
 }
 
-const updateUser = (emailAddress: string, provider: string, done: any) => {
-    const userInfo: User = {
-        provider: provider,
-        email_address: emailAddress,
-        id: '',
-        user_name: '',
-        created_on: ''
-    };
-    const updatedInfo: User = {
-        last_updated_on: new Date().toISOString(),
-        id: '',
-        user_name: '',
-        email_address: '',
-        created_on: ''
-    };
-    userService.update(userInfo, updatedInfo).then((user: User | any) => {
-        return done(null, user);
-    }).catch((error: any) => {
-        return done(error);
-    });
-};
