@@ -207,6 +207,11 @@ export default [
                 method: 'PATCH',
                 middlewares: [controllers.get('user:update')?.handler({})],
             },
+            {
+                path: 'userCreate',
+                method: 'POST',
+                middlewares: [controllers.get('user:create')?.handler({})],
+            },
         ]
     }
 ];
