@@ -8,6 +8,9 @@ export default {
         try {
             const { email_address, password } = req.body.request;
             const updateInfo = req.body.request.updateInfo;
+            if (updateInfo.password) {
+                return res.json({ error: 'Password can not be updated' });
+            }
             if (!email_address || !password) {
                 return res.json({ error: 'Password and email address are required' });
             }
