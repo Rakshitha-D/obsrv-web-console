@@ -26,8 +26,13 @@ export default {
             if (!isMatch) {
                 return res.status(401).json({ error: 'Invalid credentials' });
             }
-
-            const result = await userService.update({ email_address }, updateInfo);
+            const result = await userService.update(
+                { email_address },
+                {
+                    ...updateInfo,
+                    last_updated_on: new Date().toISOString(),
+                },
+            );
             res.status(200).json(result);
         } catch (error) {
             next(error);
