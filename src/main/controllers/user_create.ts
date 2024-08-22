@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import userService from '../services/oauthUsers';
 import { v4 } from 'uuid';
 import bcrypt from 'bcryptjs';
+import { transform } from '../../shared/utils/transformResponse';
 
 export default {
     name: 'user:create',
@@ -16,7 +17,7 @@ export default {
             const userIdentifier = { id: v4(), created_on: new Date().toISOString() };
             const userInfo = { ...userRequestBody, ...userIdentifier };
             const result = await userService.save(userInfo);
-            res.status(200).json(result);
+            res.status(200).json(transform({ id: req.body.id, result: { id: result.id, email_address: result.email_address } }));
         } catch (error) {
             next(error);
         }
