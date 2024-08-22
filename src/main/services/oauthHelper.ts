@@ -28,8 +28,8 @@ export const getUpdate = (table: string, errorMessage = "can't find the item") =
             if (data.length === 0) {
                 return Promise.reject(errorMessage);
             }
-            await alter(table, updateParams, conditionParams);
-            return Promise.resolve(updateParams);
+            const result = await alter(table, updateParams, conditionParams);
+            return Promise.resolve(result.rows[0]);
         },
     };
 };
