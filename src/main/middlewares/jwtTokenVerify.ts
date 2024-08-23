@@ -1,36 +1,35 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import CONFIG from '../../shared/resources/appConfig';
+import fs from 'fs';
+import { transform } from '../../shared/utils/transformResponse';
 
 export default {
     name: 'jwt:tokenAuthorization',
     handler: (withRole: string[]) => (req: Request, res: Response, next: NextFunction) => {
         try {
-            if (CONFIG.IS_RBAC_ENABLED === 'true') {
+            const public_key = fs.readFileSync('public_key.pem', 'utf8');
+            const { authorization } = req.query;
+            if (authorization === 'true') {
                 const authHeader = req.headers.authorization;
                 const token = authHeader && authHeader.split(' ')[1];
                 if (!token) {
-                    return res.status(401).json({ msg: 'No token provided' });
+                    return res.status(401).json(transform({ id: req.body.id, params: { status: 'FAILED', err: 'Unauthorized access', errmsg: 'No token provided' }, responseCode: 'UNAUTHORIZED' }));
                 }
-                jwt.verify(token, CONFIG.JWT_USER_AUTHORIZATION_SECRET as string, (err, decoded) => {
+                jwt.verify(token, public_key, (err, decoded) => {
                     if (err) {
-                        return res.status(403).json({ msg: 'Token verification failed' });
+                        return res
+                            .status(403)
+                            .json(transform({ id: req.body.id, params: { status: 'FAILED', err: 'Unauthorized access', errmsg: 'Token verification failed' }, responseCode: 'UNAUTHORIZED' }));
                     }
-                    if (decoded !== null && typeof decoded == 'object') {
+                    if (decoded && typeof decoded == 'object') {
                         if (withRole.length > 0 && !withRole.includes(decoded.role)) {
-                            return res.status(401).json({ msg: 'Unauthorized access' });
+                            return res
+                                .status(401)
+                                .json(transform({ id: req.body.id, params: { status: 'FAILED', err: 'Unauthorized access', errmsg: 'Access denied for the user' }, responseCode: 'UNAUTHORIZED' }));
                         }
                         next();
                     }
                 });
-                // const decoded = jwt.verify(token, CONFIG.JWT_USER_AUTHORIZATION_SECRET as string);
-                // if (decoded !== null && typeof decoded == 'object') {
-                //     const userRole = decoded.role;
-                //     if (requiredRole === userRole) {
-                //         console.log('user verified');
-                //     }
-                // }
-                // next();
             } else {
                 next();
             }
