@@ -212,6 +212,11 @@ export default [
                 method: 'POST',
                 middlewares: [controllers.get('user:create')?.handler({})],
             },
+            {
+                path: 'userStatus',
+                method: 'GET',
+                middlewares: [controllers.get('user:status')?.handler({})],
+            },
         ]
     }
 ];
