@@ -69,8 +69,13 @@ export default {
                             additionalProperties: false,
                         },
                         roles: {
-                            type: 'string',
-                            enum: ['admin', 'dataset_manager', 'viewer', 'dataset_creator'],
+                            type: 'array',
+                            items: {
+                                type: 'string',
+                                enum: ['admin', 'dataset_manager', 'viewer', 'dataset_creator'],
+                            },
+                            minItems: 1,
+                            uniqueItems: true,
                         },
                         status: {
                             type: 'string',
