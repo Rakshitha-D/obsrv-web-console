@@ -8,14 +8,18 @@ export default {
     name: 'user:create',
     handler: () => async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const userRequestBody = req.body.request;
-            if (!userRequestBody.user_name || !userRequestBody.email_address || !userRequestBody.password) {
+            const userRequest = req.body.request;
+            if (!userRequest.user_name || !userRequest.email_address || !userRequest.password) {
                 return res.json({ error: 'UserName, password and email address are required fields' });
             }
-            const { password } = req.body.request;
-            userRequestBody.password = await bcrypt.hash(password, 12);
+            const { password } = userRequest;
+            userRequest.password = await bcrypt.hash(password, 12);
+            if (userRequest.mobile_number) {
+                const { country_code, number } = userRequest.mobile_number;
+                userRequest.mobile_number = `${country_code as string}_${number as string}`;
+            }
             const userIdentifier = { id: v4(), created_on: new Date().toISOString() };
-            const userInfo = { ...userRequestBody, ...userIdentifier };
+            const userInfo = { ...userRequest, ...userIdentifier };
             const result = await userService.save(userInfo);
             res.status(200).json(transform({ id: req.body.id, result: { id: result.id, email_address: result.email_address } }));
         } catch (error) {
