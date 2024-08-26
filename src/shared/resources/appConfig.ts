@@ -59,7 +59,4 @@ export default {
         },
     },
     BASE_URL: env.BASE_URL || '/console',
-    IS_RBAC_ENABLED: env.IS_RBAC_ENABLED || 'false',
-    JWT_USER_AUTHORIZATION_SECRET: env.JWT_USER_AUTHORIZATION_SECRET,
-    JWT_USER_TOKEN_EXPIRE_IN: env.JWT_USER_TOKEN_EXPIRE_IN,
 };
