@@ -195,27 +195,67 @@ export default [
         ]
     },
     {
-        path: 'users',
+        path: 'user',
         routes: [
             {
-                path: 'userInfo',
+                path: 'read',
                 method: 'GET',
-                middlewares: [controllers.get('user:info')?.handler({})],
+                middlewares: [
+                    schemaValidator.handler({
+                        entityName: 'userRead',
+                        schema: 'verify',
+                    }),
+                    controllers.get('user:read')?.handler({}),
+                ],
             },
             {
-                path: 'userUpdate',
+                path: 'update',
                 method: 'PATCH',
-                middlewares: [controllers.get('user:update')?.handler({})],
+                middlewares: [
+                    schemaValidator.handler({
+                        entityName: 'userUpdate',
+                        schema: 'verify',
+                    }),
+                    controllers.get('user:update')?.handler({})
+                ],
             },
             {
-                path: 'userCreate',
+                path: 'create',
                 method: 'POST',
-                middlewares: [controllers.get('user:create')?.handler({})],
+                middlewares: [
+                    schemaValidator.handler({
+                        entityName: 'userCreate',
+                        schema: 'verify',
+                    }),
+                    controllers.get('user:create')?.handler({}),
+                ],
             },
             {
-                path: 'userStatus',
+                path: 'status/configure',
                 method: 'GET',
-                middlewares: [controllers.get('user:status')?.handler({})],
+                middlewares: [
+                    schemaValidator.handler({
+                        entityName: 'userStatusConfigure',
+                        schema: 'verify',
+                    }),
+                    controllers.get('user:status:configure')?.handler({}),
+                ],
+            },
+            {
+                path: 'roles/configure',
+                method: 'GET',
+                middlewares: [
+                    schemaValidator.handler({
+                        entityName: 'userRolesConfigure',
+                        schema: 'verify',
+                    }),
+                    controllers.get('user:roles:configure')?.handler({}),
+                ],
+            },
+            {
+                path: 'list',
+                method: 'GET',
+                middlewares: [controllers.get('user:list')?.handler({})],
             },
         ]
     }
