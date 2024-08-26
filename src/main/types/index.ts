@@ -9,8 +9,8 @@ export interface User {
     mobile_number?: string;
     created_on: string;
     last_updated_on?: string;
-    role?: string;
-    token?: string;
+    roles?: string;
+    status?: string;
 }
 
 export enum DatasetStatus {

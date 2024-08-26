@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
@@ -239,4 +238,3 @@ const createUser = (emailAddress: string, provider: string, done: any) => {
         return done(error)
     });
 }
-
