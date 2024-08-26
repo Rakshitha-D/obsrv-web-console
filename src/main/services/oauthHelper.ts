@@ -37,7 +37,8 @@ export const getUpdate = (table: string, errorMessage = "can't find the item") =
 export const getFindAll = (table: string, errorMessage: string = "can't find the item") => {
     return {
         findAll: async (conditionParams: any) => {
-            const data = await query(table, conditionParams);
+            const arrayValue = conditionParams.roles ? ['roles'] : [];
+            const data = await query(table, conditionParams, [], arrayValue);
             if (data.length > 0) {
                 return Promise.resolve(data);
             }
