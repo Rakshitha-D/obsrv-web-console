@@ -4,7 +4,7 @@ import userService from '../services/oauthUsers';
 import { transform } from '../../shared/utils/transformResponse';
 
 export default {
-    name: 'user:info',
+    name: 'user:read',
     handler: () => async (request: Request, response: Response, next: NextFunction) => {
         try {
             const user = _.get(request, ['body', 'request']);
@@ -19,7 +19,8 @@ export default {
                     }),
                 );
             }
-            response.status(200).json(transform({ id: request.body.id, result: { id: result.id, email_address: result.email_address } }));
+            const { password, ...rest } = result;
+            response.status(200).json(transform({ id: request.body.id, result: rest }));
         } catch (error) {
             next(error);
         }
