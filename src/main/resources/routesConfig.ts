@@ -255,7 +255,13 @@ export default [
             {
                 path: 'list',
                 method: 'GET',
-                middlewares: [controllers.get('user:list')?.handler({})],
+                middlewares: [
+                    schemaValidator.handler({
+                        entityName: 'userList',
+                        schema: 'verify',
+                    }),
+                    controllers.get('user:list')?.handler({}),
+                ],
             },
         ]
     }
