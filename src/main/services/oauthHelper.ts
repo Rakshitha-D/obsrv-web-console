@@ -33,3 +33,15 @@ export const getUpdate = (table: string, errorMessage = "can't find the item") =
         },
     };
 };
+
+export const getFindAll = (table: string, errorMessage: string = "can't find the item") => {
+    return {
+        findAll: async (conditionParams: any) => {
+            const data = await query(table, conditionParams);
+            if (data.length > 0) {
+                return Promise.resolve(data);
+            }
+            return Promise.reject(errorMessage);
+        },
+    };
+};
