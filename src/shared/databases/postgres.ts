@@ -24,12 +24,16 @@ const find = async (table: string, conditions: IPostgres, jsonbType: Array<strin
     const columns = Object.keys(conditions);
 
     const values = Object.values(conditions);
-  
+
     const whereClause = columns
-      .map((column, i) => {
-          return `${column}=$${i + 1}`;
-      })
-      .join(' AND ');
+        .map((column, i) => {
+            if (arrayType.includes(column)) {
+                return `${column}@> $${i + 1}`;
+            } else {
+                return `${column}=$${i + 1}`;
+            }
+        })
+        .join(' AND ');
   
     const query = {
       text: `SELECT * FROM ${table} WHERE ${whereClause}`,
